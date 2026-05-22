@@ -20,11 +20,11 @@ jobs:
       fail-fast: false
       matrix:
         buildplat:
-        - [ubuntu-22.04, manylinux, x86_64, "", ""]
+        #- [ubuntu-22.04, manylinux, x86_64, "", ""]
         #- [ubuntu-22.04, musllinux, x86_64, "", ""]
         #- [ubuntu-24.04-arm, manylinux, aarch64, "", ""]
         #- [ubuntu-24.04-arm, musllinux, aarch64, "", ""]
-        - [macos-15-intel, macosx, x86_64, openblas, "10.14" ]
+        #- [macos-15-intel, macosx, x86_64, openblas, "10.14" ]
         #- [macos-15-intel, macosx, x86_64, accelerate, "14.0" ]
         - [macos-14, macosx, arm64, openblas, "12.3"]
         #- [macos-14, macosx, arm64, accelerate, "14.0"]
@@ -77,25 +77,25 @@ jobs:
               SDKROOT=$(xcrun --sdk macosx --show-sdk-path) \
               INSTALL_GFORTRAN=true"
           fi
-          echo "$CIBW_ENV" >> "$GITHUB_ENV"
+          #echo "$CIBW_ENV" >> "$GITHUB_ENV"
 
           PREFIX=DYLD_LIBRARY_PATH="\$(dirname \$(gfortran --print-file-name libgfortran.dylib))"
           CIBW="$PREFIX delocate-wheel -v $EXCLUDE --require-archs {delocate_archs} -w {dest_dir} {wheel}"
           echo "CIBW_REPAIR_WHEEL_COMMAND_MACOS=$CIBW" >> "$GITHUB_ENV"
           ## QEPY build
-          BUILD_ENV="FFLAGS='-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore'"
-          BUILD_ENV+=" CPP='gcc -E'"
-          BUILD_ENV+=" LDFLAGS='-headerpad_max_install_names'"
-          BUILD_ENV+=" LIBMBD_C_API=0"
-          BUILD_ENV+=" tddft=yes"
+          CIBW_ENV="FFLAGS='-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore'"
+          CIBW_ENV+=" CPP='gcc -E'"
+          CIBW_ENV+=" LDFLAGS='-headerpad_max_install_names'"
+          CIBW_ENV+=" LIBMBD_C_API=0"
+          CIBW_ENV+=" tddft=yes"
           if [[ "${TARGET_ARCH}" == "arm64" ]]; then
-            BUILD_ENV+=" CFLAGS='-fPIC -arch arm64'"
-            BUILD_ENV+=" QE_INSTALL_FLAGS='--host=host'"
-            BUILD_ENV+=" build_alias=arm-apple-darwin20.0.0"
-            BUILD_ENV+=" host_alias=x86_64-unknown-linux-gnu"
+            CIBW_ENV+=" CFLAGS='-fPIC -arch arm64'"
+            CIBW_ENV+=" QE_INSTALL_FLAGS='--host=host'"
+            CIBW_ENV+=" build_alias=arm-apple-darwin20.0.0"
+            CIBW_ENV+=" host_alias=x86_64-unknown-linux-gnu"
           fi
-          echo "$BUILD_ENV" >> "$GITHUB_ENV"
-          echo "$BUILD_ENV"
+          echo "$CIBW_ENV" >> "$GITHUB_ENV"
+          echo "$CIBW_ENV"
       - name: Setup Linux
         if: startsWith( matrix.buildplat[0], 'ubuntu-' )
         run: |
