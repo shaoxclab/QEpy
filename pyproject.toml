@@ -86,7 +86,7 @@ manylinux-aarch64-image = "manylinux2014"
 
 [tool.cibuildwheel.linux.environment]
 RUNNER_OS="Linux"
-PKG_CONFIG_PATH = "/project/.openblas"
+#PKG_CONFIG_PATH = "/project/.openblas"
 
 [tool.cibuildwheel.macos]
 #before-build = "bash {project}/tools/wheels/cibw_before_build.sh {project}"
