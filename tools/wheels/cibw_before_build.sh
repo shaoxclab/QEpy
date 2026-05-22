@@ -76,5 +76,6 @@ EOF
 fi
 
 if [[ $RUNNER_OS == "Linux" ]]; then
-    yum install -y blas-devel lapack-devel fftw-devel
+    #yum install -y blas-devel lapack-devel fftw-devel
+    yum install -y fftw-devel
 fi
