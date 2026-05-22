@@ -1,5 +1,7 @@
 #
-brew install gnu-sed
+if [[ $RUNNER_OS == "macOS" ]]; then
+    brew install gnu-sed
+fi
 # From scipy
 set -xe
 

@@ -83,16 +83,15 @@ build = "cp3{11,12}-*"
 [tool.cibuildwheel.linux]
 manylinux-x86_64-image = "manylinux2014"
 manylinux-aarch64-image = "manylinux2014"
-before-build = "bash {project}/tools/wheels/cibw_before_build_linux.sh {project}"
 
 [tool.cibuildwheel.linux.environment]
 RUNNER_OS="Linux"
-PKG_CONFIG_PATH = "/project/.openblas"
+PKG_CONFIG_PATH = "{project}"
 
 [tool.cibuildwheel.macos]
-before-build = "bash {project}/tools/wheels/cibw_before_build_macos.sh {project}"
+before-build = "bash {project}/tools/wheels/cibw_before_build.sh {project}"
 
 [tool.cibuildwheel.macos.environment]
-RUNNER_OS="MacOS"
+RUNNER_OS="macOS"
 PKG_CONFIG_PATH = "{project}"
 LIBMBD_C_API=0
