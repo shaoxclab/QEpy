@@ -83,26 +83,27 @@ jobs:
           CIBW="$PREFIX delocate-wheel -v $EXCLUDE --require-archs {delocate_archs} -w {dest_dir} {wheel}"
           echo "CIBW_REPAIR_WHEEL_COMMAND_MACOS=$CIBW" >> "$GITHUB_ENV"
           ## QEPY build
-          QEPY_BUILD_ENV="FFLAGS='-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore' \
-                            CPP='gcc -E' LDFLAGS='-headerpad_max_install_names' \
-                            LIBMBD_C_API=0 \
-                            tddft=yes"
+          BUILD_ENV="FFLAGS='-fPIC -fallow-argument-mismatch -ff2c -fno-second-underscore'"
+          BUILD_ENV+=" CPP='gcc -E'"
+          BUILD_ENV+=" LDFLAGS='-headerpad_max_install_names'"
+          BUILD_ENV+=" LIBMBD_C_API=0"
+          BUILD_ENV+=" tddft=yes"
           if [[ "${TARGET_ARCH}" == "arm64" ]]; then
-            QEPY_BUILD_ENV+=" CFLAGS='-fPIC -arch arm64' \
-                              QE_INSTALL_FLAGS='--host=host' \
-                              build_alias=arm-apple-darwin20.0.0 \
-                              host_alias=x86_64-unknown-linux-gnu"
+            BUILD_ENV+=" CFLAGS='-fPIC -arch arm64'"
+            BUILD_ENV+=" QE_INSTALL_FLAGS='--host=host'"
+            BUILD_ENV+=" build_alias=arm-apple-darwin20.0.0"
+            BUILD_ENV+=" host_alias=x86_64-unknown-linux-gnu"
           fi
-          echo "$QEPY_BUILD_ENV" >> "$GITHUB_ENV"
-          echo "$QEPY_BUILD_ENV"
+          echo "$BUILD_ENV" >> "$GITHUB_ENV"
+          echo "$BUILD_ENV"
       - name: Setup Linux
         if: startsWith( matrix.buildplat[0], 'ubuntu-' )
         run: |
           echo "INSTALL_GFORTRAN=false" >> "$GITHUB_ENV"
-          QEPY_BUILD_ENV="FFLAGS='-fPIC -fallow-argument-mismatch' \
-                            LIBMBD_C_API=0 \
-                            tddft=yes"
-          echo "$QEPY_BUILD_ENV" >> "$GITHUB_ENV"
+          BUILD_ENV="FFLAGS='-fPIC -fallow-argument-mismatch'"
+          BUILD_ENV+=" LIBMBD_C_API=0"
+          BUILD_ENV+=" tddft=yes"
+          echo "$BUILD_ENV" >> "$GITHUB_ENV"
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1
@@ -113,6 +114,4 @@ jobs:
       - uses: actions/upload-artifact@v7.0.0
         with:
           path: ./wheelhouse/*.whl
-          name: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
-            ${{ matrix.buildplat[2] }} ${{ matrix.buildplat[3] }}
-            ${{ matrix.buildplat[4] }}
+          name: ${{ matrix.python }}-${{ matrix.buildplat[1] }}-${{ matrix.buildplat[2] }}-${{ matrix.buildplat[3] }}-${{ matrix.buildplat[4] }}
