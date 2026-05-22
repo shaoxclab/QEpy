@@ -33,8 +33,8 @@ jobs:
         #- [ubuntu-20.04, manylinux, x86_64]
         #- [macos-12, macosx, x86_64]
         #- [macos-14, macosx, arm64]
-        #python: ["cp310", "cp312"]
-        python: ["cp312"]
+        #python: ["cp39", "cp312"]
+        python: ["cp39"]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -95,15 +95,14 @@ jobs:
             CIBW_ENV+=" host_alias=x86_64-unknown-linux-gnu"
           fi
           echo "$CIBW_ENV" >> "$GITHUB_ENV"
-          echo "$CIBW_ENV"
       - name: Setup Linux
         if: startsWith( matrix.buildplat[0], 'ubuntu-' )
         run: |
           echo "INSTALL_GFORTRAN=false" >> "$GITHUB_ENV"
-          BUILD_ENV+=" FFLAGS='-fPIC -fallow-argument-mismatch'"
-          BUILD_ENV+=" LIBMBD_C_API=0"
-          BUILD_ENV+=" tddft=yes"
-          echo "$BUILD_ENV" >> "$GITHUB_ENV"
+          CIBW_ENV+=" FFLAGS='-fPIC -fallow-argument-mismatch'"
+          CIBW_ENV+=" LIBMBD_C_API=0"
+          CIBW_ENV+=" tddft=yes"
+          echo "$CIBW_ENV" >> "$GITHUB_ENV"
 
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1
