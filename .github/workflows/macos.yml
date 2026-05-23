@@ -99,7 +99,7 @@ jobs:
         if: startsWith( matrix.buildplat[0], 'ubuntu-' )
         run: |
           echo "INSTALL_GFORTRAN=false" >> "$GITHUB_ENV"
-          CIBW_ENV="CIBW_ENVIRONMENT_LINUX=INSTALL_OPENBLAS=false"
+          CIBW_ENV="CIBW_ENVIRONMENT_LINUX=INSTALL_OPENBLAS=true"
           CIBW_ENV+=" FFLAGS='-fPIC -fallow-argument-mismatch'"
           CIBW_ENV+=" LIBMBD_C_API=0"
           CIBW_ENV+=" tddft=yes"
@@ -110,6 +110,7 @@ jobs:
         env:
           CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}*
           CIBW_ARCHS: ${{ matrix.buildplat[2] }}
+          CIBW_BUILD_VERBOSITY: 3
 
       - uses: actions/upload-artifact@v7.0.0
         with:
