@@ -1,7 +1,7 @@
 #
 if [[ $RUNNER_OS == "macOS" ]]; then
     brew install gnu-sed
-elif [[ $RUNNER_OS == "Linux" ]]; then
+elif [[ "$RUNNER_OS" == "Linux" || -f /etc/redhat-release  ]]; then
     if [[ "$INSTALL_OPENBLAS" = "true" ]] ; then
 	echo "scipy_openblas"
 	yum install -y fftw-devel
@@ -9,7 +9,6 @@ elif [[ $RUNNER_OS == "Linux" ]]; then
 	echo "blas-devel"
 	yum install -y blas-devel lapack-devel fftw-devel
     fi
-    yum install -y blas-devel lapack-devel fftw-devel
 fi
 # From scipy
 set -xe
